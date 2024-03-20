@@ -103,7 +103,7 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
 
                 val smsManager = SmsManager.getDefault() as SmsManager
                 val parts = smsManager.divideMessage(it.message)
-                smsManager.sendMultipartTextMessage(it.number, null, parts, sentPIn, deliverPIn)
+                smsManager.sendMultipartTextMessage(it.number, null, parts, arrayOf(sentPIn, deliverPIn), null)
                 mainActivity.runOnUiThread(Runnable {
                     mainActivity.logMain("Sent to: " + it.number + " - id: " + it.messageId + " - message: " + it.message)
                 })
