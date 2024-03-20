@@ -91,6 +91,8 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
 
 
                 val sentPIn = PendingIntent.getBroadcast(mainActivity, mainActivity.nextRequestCode(), sentIn,0)
+                val sentPInArrayList = ArrayList<PendingIntent>()
+                sentPInArrayList.add(sentPIn)
 
                 val deliverIn = Intent(mainActivity.DELIVER_SMS_FLAG)
                 deliverIn.putExtra("messageId", it.messageId)
@@ -100,10 +102,14 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
 
 
                 val deliverPIn = PendingIntent.getBroadcast(mainActivity, mainActivity.nextRequestCode(), deliverIn, 0)
+                val deliverPInArrayList = ArrayList<PendingIntent>()
+                deliverPInArrayList.add(deliverPIn)
 
                 val smsManager = SmsManager.getDefault() as SmsManager
                 val parts = smsManager.divideMessage(it.message)
-                smsManager.sendMultipartTextMessage(it.number, null, parts, arrayOf(sentPIn), arrayOf(deliverPIn), null)
+
+
+                smsManager.sendMultipartTextMessage(it.number, null, parts, sentPInArrayList, deliverPInArrayList, null)
                 mainActivity.runOnUiThread(Runnable {
                     mainActivity.logMain("Sent to: " + it.number + " - id: " + it.messageId + " - message: " + it.message)
                 })
